@@ -16,6 +16,10 @@ type IPagination = {
   offset: number;
 };
 
+export type AuthUser = {
+  user_id: number;
+};
+
 export type QueryArgs = {
   filter: Record<string, any>;
   pagination?: IPagination;

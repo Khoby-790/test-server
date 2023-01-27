@@ -31,6 +31,7 @@
     "@graphql-tools/schema": "^9.0.14",
     "@types/lodash": "^4.14.177",
     "apollo-server-express": "^3.5.0",
+    "babel-register": "^6.26.0",
     "bcryptjs": "^2.4.3",
     "express": "^4.17.1",
     "graphql": "^16.0.1",

@@ -24,6 +24,30 @@ export type AuthPayload = {
   user: User;
 };
 
+export type Blog = {
+  __typename?: 'Blog';
+  banner: Scalars['String'];
+  body: Scalars['String'];
+  created_at?: Maybe<Scalars['Date']>;
+  dislikes: Scalars['Int'];
+  id: Scalars['ID'];
+  likes: Scalars['Int'];
+  title: Scalars['String'];
+};
+
+export type BlogFilter = {
+  __typename?: 'BlogFilter';
+  id?: Maybe<IdOperator>;
+  title?: Maybe<StringOperator>;
+};
+
+export type BlogInput = {
+  banner: Scalars['String'];
+  body: Scalars['String'];
+  id?: InputMaybe<Scalars['ID']>;
+  title: Scalars['String'];
+};
+
 export type BooleanOperator = {
   eq?: InputMaybe<Scalars['Boolean']>;
 };
@@ -68,14 +92,32 @@ export type MoneyRange = {
 export type Mutation = {
   __typename?: 'Mutation';
   _?: Maybe<Scalars['Boolean']>;
+  createBlog?: Maybe<Scalars['Boolean']>;
+  removeBlog?: Maybe<Scalars['Boolean']>;
   removeUser?: Maybe<Scalars['Boolean']>;
+  updateBlog?: Maybe<Scalars['Boolean']>;
   userSignIn?: Maybe<AuthPayload>;
   userSignUp?: Maybe<AuthPayload>;
 };
 
 
+export type MutationCreateBlogArgs = {
+  input?: InputMaybe<BlogInput>;
+};
+
+
+export type MutationRemoveBlogArgs = {
+  id: Scalars['ID'];
+};
+
+
 export type MutationRemoveUserArgs = {
   id: Scalars['ID'];
+};
+
+
+export type MutationUpdateBlogArgs = {
+  input?: InputMaybe<BlogInput>;
 };
 
 
@@ -110,7 +152,26 @@ export type Pagination = {
 export type Query = {
   __typename?: 'Query';
   _?: Maybe<Scalars['Boolean']>;
+  getBlog?: Maybe<Blog>;
+  getBlogs?: Maybe<Array<Blog>>;
+  getBlogsLength: Scalars['Int'];
   me?: Maybe<AuthPayload>;
+};
+
+
+export type QueryGetBlogArgs = {
+  filter?: InputMaybe<BlogFilter>;
+};
+
+
+export type QueryGetBlogsArgs = {
+  filter?: InputMaybe<BlogFilter>;
+  pagination?: InputMaybe<Pagination>;
+};
+
+
+export type QueryGetBlogsLengthArgs = {
+  filter?: InputMaybe<BlogFilter>;
 };
 
 export type RegisterInput = {
@@ -223,6 +284,9 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   AuthPayload: ResolverTypeWrapper<AuthPayload>;
+  Blog: ResolverTypeWrapper<Blog>;
+  BlogFilter: ResolverTypeWrapper<BlogFilter>;
+  BlogInput: BlogInput;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   BooleanOperator: BooleanOperator;
   Date: ResolverTypeWrapper<Scalars['Date']>;
@@ -254,6 +318,9 @@ export type ResolversTypes = {
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   AuthPayload: AuthPayload;
+  Blog: Blog;
+  BlogFilter: BlogFilter;
+  BlogInput: BlogInput;
   Boolean: Scalars['Boolean'];
   BooleanOperator: BooleanOperator;
   Date: Scalars['Date'];
@@ -287,6 +354,23 @@ export type AuthPayloadResolvers<ContextType = any, ParentType extends Resolvers
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type BlogResolvers<ContextType = any, ParentType extends ResolversParentTypes['Blog'] = ResolversParentTypes['Blog']> = {
+  banner?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  body?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  created_at?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  dislikes?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  likes?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type BlogFilterResolvers<ContextType = any, ParentType extends ResolversParentTypes['BlogFilter'] = ResolversParentTypes['BlogFilter']> = {
+  id?: Resolver<Maybe<ResolversTypes['IdOperator']>, ParentType, ContextType>;
+  title?: Resolver<Maybe<ResolversTypes['StringOperator']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
   name: 'Date';
 }
@@ -305,13 +389,19 @@ export interface MoneyScalarConfig extends GraphQLScalarTypeConfig<ResolversType
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   _?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  createBlog?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationCreateBlogArgs, never>>;
+  removeBlog?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRemoveBlogArgs, 'id'>>;
   removeUser?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRemoveUserArgs, 'id'>>;
+  updateBlog?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUpdateBlogArgs, never>>;
   userSignIn?: Resolver<Maybe<ResolversTypes['AuthPayload']>, ParentType, ContextType, RequireFields<MutationUserSignInArgs, never>>;
   userSignUp?: Resolver<Maybe<ResolversTypes['AuthPayload']>, ParentType, ContextType, RequireFields<MutationUserSignUpArgs, never>>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   _?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  getBlog?: Resolver<Maybe<ResolversTypes['Blog']>, ParentType, ContextType, RequireFields<QueryGetBlogArgs, never>>;
+  getBlogs?: Resolver<Maybe<Array<ResolversTypes['Blog']>>, ParentType, ContextType, RequireFields<QueryGetBlogsArgs, never>>;
+  getBlogsLength?: Resolver<ResolversTypes['Int'], ParentType, ContextType, RequireFields<QueryGetBlogsLengthArgs, never>>;
   me?: Resolver<Maybe<ResolversTypes['AuthPayload']>, ParentType, ContextType>;
 };
 
@@ -326,6 +416,8 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
 
 export type Resolvers<ContextType = any> = {
   AuthPayload?: AuthPayloadResolvers<ContextType>;
+  Blog?: BlogResolvers<ContextType>;
+  BlogFilter?: BlogFilterResolvers<ContextType>;
   Date?: GraphQLScalarType;
   DateTime?: GraphQLScalarType;
   Email?: GraphQLScalarType;

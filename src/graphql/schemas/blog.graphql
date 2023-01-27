@@ -1,0 +1,33 @@
+type Blog {
+  id: ID!
+  title: String!
+  banner: String!
+  body: String!
+  likes: Int!
+  dislikes: Int!
+  created_at: Date
+}
+
+input BlogInput {
+  id: ID
+  title: String!
+  body: String!
+  banner: String!
+}
+
+type BlogFilter {
+  id: IdOperator
+  title: StringOperator
+}
+
+extend type Query {
+  getBlogs(filter: BlogFilter, pagination: Pagination): [Blog!]
+  getBlogsLength(filter: BlogFilter): Int!
+  getBlog(filter: BlogFilter): Blog
+}
+
+extend type Mutation {
+  createBlog(input: BlogInput): Boolean
+  updateBlog(input: BlogInput): Boolean
+  removeBlog(id: ID!): Boolean
+}

@@ -1,6 +1,6 @@
 import { GraphQLError } from "graphql";
 import { AuthPayload, LoginInput, RegisterInput } from "../graphql/generated";
-import User from "../models/user";
+import { User } from "../models";
 import { QueryArgs } from "../type";
 import { genSalt, hash } from "bcryptjs";
 import { AUTHENTICATION_ERROR_MESSAGE } from "../constants";

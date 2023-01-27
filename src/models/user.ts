@@ -35,6 +35,11 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
    */
   static associate(models: any) {
     // define association here
+    this.hasMany(models.Blog, {
+      as: "blogs",
+      foreignKey: "user_id",
+      sourceKey: "id",
+    });
   }
 }
 
@@ -55,7 +60,7 @@ export const initUser = (sequelize: Sequelize) => {
     {
       sequelize,
       modelName: "User",
-      tableName: "payouts_prim",
+      tableName: "users",
       underscored: true,
     }
   );

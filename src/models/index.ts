@@ -3,6 +3,7 @@ import { Op, Sequelize } from "sequelize";
 const env = process.env.NODE_ENV || "development";
 const config = require(__dirname + "/../config/config.json")[env];
 import _User, { initUser } from "./user";
+import _Blog, { initBlog } from "./blog";
 const isDev = env === "development";
 
 const operatorsAliases = {
@@ -29,10 +30,12 @@ export const sequelize = new Sequelize(
 );
 //init models~
 initUser(sequelize);
+initBlog(sequelize);
 // sequelize.sync({ alter: isDev });
 
 const models = {
   User: _User,
+  Blog: _Blog,
 };
 
 // Run `.associate` if it exists,
@@ -41,4 +44,4 @@ const models = {
 //   .filter((model) => typeof model.associate === "function")
 //   .forEach((model) => model.associate(models));
 
-export const {} = models;
+export const { User, Blog } = models;
