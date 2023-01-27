@@ -1,6 +1,7 @@
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import schema from "./graphql/schemasMap";
+import { __disolveContext } from "./utils";
 
 const PORT = 8001;
 
@@ -15,11 +16,7 @@ const PORT = 8001;
   const server = new ApolloServer({
     schema,
     introspection: true,
-    context: ({ req }) => {
-      return {
-        user: null,
-      };
-    },
+    context: __disolveContext,
   });
   await server.start();
   server.applyMiddleware({ app, path: "/graphql" });

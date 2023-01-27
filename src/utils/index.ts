@@ -1,46 +1,54 @@
-import { ForbiddenError } from 'apollo-server-express';
-import { skip } from 'graphql-resolvers';
-import jwt from 'jsonwebtoken';
-import { Op } from 'sequelize';
-import { Request } from 'express';
-import { IResolver } from '../type';
-import _ from 'lodash';
-import { Pagination } from '../graphql/generated';
+import { ForbiddenError } from "apollo-server-express";
+import { skip } from "graphql-resolvers";
+import jwt from "jsonwebtoken";
+import { Op } from "sequelize";
+import { Request } from "express";
+import { IResolver } from "../type";
+import _ from "lodash";
+import { Pagination } from "../graphql/generated";
+import { JWT_SECRET } from "../constants";
 
-const secret = process.env.JWT_SECRET || 'hellothere';
-
-export const __disolveContext = async ({ req }: any) => ({
-  user: JSON.parse(req.headers.user ?? '{}') as any,
-  country: req.headers.country,
-});
+export const __disolveContext = async ({ req }: any) => {
+  const token = req.headers["token"];
+  const user = jwt.verify(token, JWT_SECRET);
+  if (!user)
+    return {
+      user: null,
+    };
+  return {
+    user,
+  };
+};
 
 export const isAuthenticated: IResolver = (root, args, { user }) =>
-  user ? skip : new ForbiddenError('Not authenticated as user.');
+  user ? skip : new ForbiddenError("Not authenticated as user.");
 
 export const hasCountry: IResolver = (parent, args, { country }) => {
-  return country ? skip : new ForbiddenError('You are not authorized to access this resource');
+  return country
+    ? skip
+    : new ForbiddenError("You are not authorized to access this resource");
 };
 
 const filterDictionary = {
-  gt: '$gt',
-  lt: '$lt',
-  in: '$in',
-  notIn: '$notIn',
-  eq: '$eq',
-  between: '$between',
-  regex: '$regexp',
-  contains: '$contains',
-  iLike: '$iLike',
-  like: '$like',
-  notLike: '$notLike',
-  and: '$and',
-  or: '$or',
+  gt: "$gt",
+  lt: "$lt",
+  in: "$in",
+  notIn: "$notIn",
+  eq: "$eq",
+  between: "$between",
+  regex: "$regexp",
+  contains: "$contains",
+  iLike: "$iLike",
+  like: "$like",
+  notLike: "$notLike",
+  and: "$and",
+  or: "$or",
 };
 
-export const preprocessFilter = (filter: any, condition: string = 'or') => {
+export const preprocessFilter = (filter: any, condition: string = "or") => {
   const newFilter: Record<string, any> = {};
   if (!filter) return newFilter;
-  _.map(_.keys(filter), key => {
+  _.map(_.keys(filter), (key) => {
     const value = _.property(key)(filterDictionary) as string;
     if (value) {
       newFilter[value] = filter[key];
@@ -48,7 +56,7 @@ export const preprocessFilter = (filter: any, condition: string = 'or') => {
         newFilter[value] = filter[key];
       } else if (_.isObject(filter[key])) {
         newFilter[value] = preprocessFilter(filter[key]);
-      } else if (_.isString(filter[key]) && key === 'like') {
+      } else if (_.isString(filter[key]) && key === "like") {
         newFilter[value] = `%${filter[key]}%`;
       }
     } else {
@@ -65,9 +73,12 @@ export const preprocessFilter = (filter: any, condition: string = 'or') => {
     : newFilter;
 };
 
-const joinFilterWithCondition = (filter: Record<string, any>, condition: string) => {
+const joinFilterWithCondition = (
+  filter: Record<string, any>,
+  condition: string
+) => {
   return {
-    [condition === 'or' ? Op.or : Op.and]: Object.keys(filter).map(key => ({
+    [condition === "or" ? Op.or : Op.and]: Object.keys(filter).map((key) => ({
       [key]: filter[key],
     })),
   };

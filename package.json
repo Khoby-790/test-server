@@ -8,6 +8,7 @@
     "cd": "graphql-codegen --config codegen.yml",
     "start": "ts-node src/index.ts",
     "prestart": "yarn codegen && yarn db",
+    "db:create": "npx sequelize db:create",
     "db": "npx sequelize db:migrate",
     "dev": "nodemon src/index.ts"
   },

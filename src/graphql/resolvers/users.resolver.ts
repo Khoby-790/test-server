@@ -1,4 +1,4 @@
-import { getUsers } from "../../brokers/user.broker";
+import { createUser, getUsers, userLogin } from "../../brokers/user.broker";
 import { IResolvers } from "../../type";
 
 const usersRolver: IResolvers = {
@@ -8,6 +8,8 @@ const usersRolver: IResolvers = {
   },
   Mutation: {
     _: async () => true,
+    userSignUp: async (_, { input }) => await createUser(input),
+    userSignIn: async (_, { input }) => await userLogin(input),
   },
 };
 

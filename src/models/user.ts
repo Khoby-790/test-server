@@ -13,7 +13,6 @@ import { JWT_SECRET } from "../constants";
 class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare id: CreationOptional<number>;
   declare email: string;
-  declare phone: CreationOptional<string>;
   declare first_name: string;
   declare last_name: string;
   declare hash: string;
@@ -52,7 +51,6 @@ export const initUser = (sequelize: Sequelize) => {
         primaryKey: true,
       },
       email: DataTypes.STRING,
-      phone: DataTypes.STRING,
       first_name: DataTypes.STRING,
       last_name: DataTypes.STRING,
       hash: DataTypes.STRING,

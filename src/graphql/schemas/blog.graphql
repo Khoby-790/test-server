@@ -15,7 +15,7 @@ input BlogInput {
   banner: String!
 }
 
-type BlogFilter {
+input BlogFilter {
   id: IdOperator
   title: StringOperator
 }

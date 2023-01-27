@@ -1,7 +1,7 @@
 import { Op, Sequelize } from "sequelize";
 
 const env = process.env.NODE_ENV || "development";
-const config = require(__dirname + "/../config/config.json")[env];
+const config = require(__dirname + "/../config/database.js")[env];
 import _User, { initUser } from "./user";
 import _Blog, { initBlog } from "./blog";
 const isDev = env === "development";

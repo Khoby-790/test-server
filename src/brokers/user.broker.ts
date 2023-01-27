@@ -23,7 +23,6 @@ export const createUser = async ({
   const _user = await User.create({
     email,
     hash: __password,
-    phone: phone as string,
     first_name,
     last_name,
   });
