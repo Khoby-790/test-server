@@ -1,0 +1,43 @@
+type User {
+  id: ID!
+  email: String!
+  phone: String
+  first_name: String!
+  last_name: String!
+}
+
+type AuthPayload {
+  user: User!
+  token: String!
+}
+
+input UserFilter {
+  id: IdOperator
+  email: StringOperator
+  phone: StringOperator
+  first_name: StringOperator
+  last_name: StringOperator
+}
+
+input RegisterInput {
+  email: String!
+  phone: String
+  first_name: String!
+  last_name: String!
+  password: String!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+extend type Query {
+  me: AuthPayload
+}
+
+extend type Mutation {
+  userSignUp(input: RegisterInput): AuthPayload
+  userSignIn(input: LoginInput): AuthPayload
+  removeUser(id: ID!): Boolean
+}
