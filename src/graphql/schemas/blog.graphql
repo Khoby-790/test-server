@@ -4,15 +4,17 @@ type Blog {
   banner: String!
   body: String!
   likes: Int!
+  author: User
   dislikes: Int!
-  created_at: Date
+  createdAt: Date!
+  updatedAt: Date!
 }
 
 input BlogInput {
   id: ID
   title: String!
   body: String!
-  banner: String!
+  banner: String
 }
 
 input BlogFilter {

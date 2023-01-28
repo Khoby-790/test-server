@@ -4,6 +4,7 @@ import { User } from "../models";
 import { QueryArgs } from "../type";
 import { genSalt, hash } from "bcryptjs";
 import { AUTHENTICATION_ERROR_MESSAGE } from "../constants";
+import { preprocessFilter, processPagination } from "../utils";
 /**
  *  create User
  *  @param {}
@@ -14,7 +15,6 @@ export const createUser = async ({
   first_name,
   last_name,
   password,
-  phone,
 }: RegisterInput): Promise<AuthPayload | GraphQLError> => {
   const userExists = await User.findOne({ where: { email } }); // check for duplicate users with same email
   if (userExists) return new GraphQLError("User already exists");
@@ -70,7 +70,16 @@ export const removeUser = async () => {};
  *  @param {}
  *  @return boolean
  */
-export const getUsers = async ({ filter, pagination }: QueryArgs) => {};
+export const getUsers = async ({ filter, pagination }: QueryArgs) => {
+  const where = preprocessFilter(filter);
+  processPagination(pagination);
+  const result = await User.findAll({
+    where,
+    ...processPagination(pagination),
+  });
+
+  return result;
+};
 
 /**
  *  get a single User

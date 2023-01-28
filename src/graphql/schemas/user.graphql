@@ -6,7 +6,7 @@ type User {
 }
 
 type AuthPayload {
-  user: User!
+  user: User
   token: String!
 }
 

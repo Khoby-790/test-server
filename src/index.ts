@@ -1,28 +1,34 @@
+import "reflect-metadata";
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
+import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
 import schema from "./graphql/schemasMap";
+import http from "http";
+import { GraphQLSchema } from "graphql";
 import { __disolveContext } from "./utils";
+require("./models");
+const PORT = process.env.PORT || 4000;
 
-const PORT = 8001;
-
-(async () => {
+async function startApolloServer(schema: GraphQLSchema) {
   const app = express();
-
-  app.get("/authorize", (req, res) => {
-    console.log("authorize", req.body);
-    res.send("authorize");
-  });
-
+  const httpServer = http.createServer(app);
   const server = new ApolloServer({
-    schema,
+    schema: schema,
+    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
     introspection: true,
     context: __disolveContext,
   });
+
   await server.start();
   server.applyMiddleware({ app, path: "/graphql" });
-  app.listen(PORT, () => {
-    console.log(
-      `🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`
-    );
+  await new Promise<void>((resolve) => {
+    httpServer.listen(PORT, () => {
+      console.log(
+        `🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`
+      );
+      resolve();
+    });
   });
-})();
+}
+
+startApolloServer(schema);

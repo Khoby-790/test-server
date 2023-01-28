@@ -1,4 +1,6 @@
+import { faker } from "@faker-js/faker";
 import { GraphQLError } from "graphql";
+import _ from "lodash";
 import { BlogInput, MutationRemoveBlogArgs } from "../graphql/generated";
 import { Blog } from "../models";
 import { AuthUser, QueryArgs } from "../type";
@@ -12,7 +14,7 @@ import { preprocessFilter, processPagination } from "../utils";
 export const createBlog = async ({
   title,
   body,
-  banner,
+  banner = faker.image.image(),
   user_id,
 }: BlogInput & AuthUser) => {
   await Blog.create({ title, body, banner, user_id });
@@ -54,7 +56,13 @@ export const removeBlog = async ({ id }: MutationRemoveBlogArgs) => {
 export const getBlogs = async ({ filter, pagination }: QueryArgs) => {
   const where = preprocessFilter(filter);
   const paging = processPagination(pagination);
-  const result = await Blog.findAll({ where, ...paging });
+  const result = await Blog.findAll({
+    where,
+    include: ["author"],
+    order: [["id", "DESC"]],
+    ...paging,
+  });
+  // console.dir(_.last(result));
   return result;
 };
 
@@ -74,4 +82,8 @@ export const getBlog = async ({ filter }: QueryArgs) => {
  *  @param {}
  *  @return boolean
  */
-export const getBlogsLength = async () => {};
+export const getBlogsLength = async ({ filter }: any) => {
+  const where = preprocessFilter(filter);
+  const result = await Blog.count({ where });
+  return result;
+};

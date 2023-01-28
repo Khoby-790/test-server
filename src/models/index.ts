@@ -40,8 +40,8 @@ const models = {
 
 // Run `.associate` if it exists,
 // ie create relationships in the ORM
-// Object.values(models)
-//   .filter((model) => typeof model.associate === "function")
-//   .forEach((model) => model.associate(models));
+Object.values(models)
+  .filter((model) => typeof model.associate === "function")
+  .forEach((model) => model.associate(models));
 
 export const { User, Blog } = models;

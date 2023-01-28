@@ -10,6 +10,8 @@ import { JWT_SECRET } from "../constants";
 
 export const __disolveContext = async ({ req }: any) => {
   const token = req.headers["token"];
+  if (!token) return null;
+  // console.log("TOKEN", token);
   const user = jwt.verify(token, JWT_SECRET);
   if (!user)
     return {
@@ -30,19 +32,19 @@ export const hasCountry: IResolver = (parent, args, { country }) => {
 };
 
 const filterDictionary = {
-  gt: "$gt",
-  lt: "$lt",
-  in: "$in",
-  notIn: "$notIn",
-  eq: "$eq",
-  between: "$between",
-  regex: "$regexp",
-  contains: "$contains",
-  iLike: "$iLike",
-  like: "$like",
-  notLike: "$notLike",
-  and: "$and",
-  or: "$or",
+  gt: Op.gt,
+  lt: Op.lt,
+  in: Op.in,
+  notIn: Op.notIn,
+  eq: Op.eq,
+  between: Op.between,
+  regex: Op.regexp,
+  contains: Op.contains,
+  iLike: Op.iLike,
+  like: Op.like,
+  notLike: Op.notLike,
+  and: Op.and,
+  or: Op.or,
 };
 
 export const preprocessFilter = (filter: any, condition: string = "or") => {

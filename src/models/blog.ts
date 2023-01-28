@@ -48,7 +48,7 @@ export const initBlog = (sequelize: Sequelize) => {
     {
       sequelize,
       modelName: "Blog",
-      tableName: "payouts_prim",
+      tableName: "blogs",
       underscored: true,
     }
   );

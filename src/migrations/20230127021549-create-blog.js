@@ -15,7 +15,7 @@ module.exports = {
         type: Sequelize.STRING,
       },
       body: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
       },
       user_id: {
         type: Sequelize.INTEGER,
@@ -31,10 +31,12 @@ module.exports = {
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,
+        defaultValue: Sequelize.NOW,
       },
       updated_at: {
         allowNull: false,
         type: Sequelize.DATE,
+        defaultValue: Sequelize.NOW,
       },
     });
   },
