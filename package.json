@@ -10,6 +10,7 @@
     "prestart": "yarn codegen && yarn db",
     "db:create": "npx sequelize db:create",
     "db": "npx sequelize db:migrate",
+    "seed": "npx sequelize db:seed:all",
     "dev": "nodemon src/index.ts"
   },
   "keywords": [],
